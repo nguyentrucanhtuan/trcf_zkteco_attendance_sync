@@ -427,20 +427,10 @@ class TrcfZktecoDevice(models.Model):
                 # ✅ SỬA: Set đúng thời gian local
                 try:
                     conn.set_time(local_naive)  # ✅ Set local time thay vì UTC
-                    print("✅ Method 1: Set local time successfully")
+                    print("✅ Method: Set local time successfully")
                 except Exception as e1:
-                    print(f"❌ Method 1 failed: {e1}")
-                    
-                    try:
-                        # Cách 2: Thử với UTC conversion
-                        utc_now = datetime.now(pytz.UTC)  # ✅ SỬA: Đúng syntax
-                        local_time = utc_now.astimezone(target_timezone)
-                        conn.set_time(local_time.replace(tzinfo=None))
-                        print("✅ Method 2: Set with timezone conversion")
-                    except Exception as e2:
-                        print(f"❌ Method 2 failed: {e2}")
-                        raise UserError(f"Cannot set device time. Errors: {e1}, {e2}")
-                
+                    print(f"❌ Set local time failed: {e1}")
+
                 # Verify sau khi set
                 device_time_after = conn.get_time()
                 time_diff = (device_time_after - device_time_before).total_seconds() / 3600
